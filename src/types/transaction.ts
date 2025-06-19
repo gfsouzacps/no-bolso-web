@@ -1,4 +1,3 @@
-
 export interface Transaction {
   id: string;
   description: string;
@@ -10,7 +9,7 @@ export interface Transaction {
   categoryId?: string; // Para categorias de investimento
   transactionCategoryId?: string; // Para categorias de transação normais
   recurrence?: {
-    type: 'none' | 'monthly' | 'weekly' | 'yearly' | 'custom';
+    type: 'none' | 'daily' | 'weekly' | 'biweekly' | 'monthly' | 'bimonthly' | 'quarterly' | 'semester' | 'yearly' | 'custom';
     repetitions?: number;
     endDate?: Date;
     isInfinite?: boolean;
@@ -56,7 +55,7 @@ export interface TransactionFormData {
   categoryId?: string;
   transactionCategoryId?: string;
   recurrence?: {
-    type: 'none' | 'monthly' | 'weekly' | 'yearly' | 'custom';
+    type: 'none' | 'daily' | 'weekly' | 'biweekly' | 'monthly' | 'bimonthly' | 'quarterly' | 'semester' | 'yearly' | 'custom';
     repetitions?: number;
     endDate?: Date;
     isInfinite?: boolean;

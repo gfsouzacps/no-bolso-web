@@ -23,7 +23,7 @@ const recurringSchema = z.object({
   type: z.enum(['income', 'expense']),
   transactionCategoryId: z.string().min(1, 'Categoria é obrigatória'),
   walletId: z.string().min(1, 'Carteira é obrigatória'),
-  frequency: z.enum(['weekly', 'monthly', 'yearly']),
+  frequency: z.enum(['daily', 'weekly', 'biweekly', 'monthly', 'bimonthly', 'quarterly', 'semester', 'yearly']),
   startDate: z.date(),
   endDate: z.date().optional(),
   isInfinite: z.boolean(),
@@ -62,6 +62,17 @@ export function RecurringModal({ open, onOpenChange }: RecurringModalProps) {
 
   const availableWallets = wallets.filter(w => w.name !== 'Investimentos');
 
+  const frequencyOptions = [
+    { value: 'daily', label: 'Diário' },
+    { value: 'weekly', label: 'Semanal' },
+    { value: 'biweekly', label: 'Quinzenal' },
+    { value: 'monthly', label: 'Mensal' },
+    { value: 'bimonthly', label: 'Bimestral' },
+    { value: 'quarterly', label: 'Trimestral' },
+    { value: 'semester', label: 'Semestral' },
+    { value: 'yearly', label: 'Anual' },
+  ];
+
   const onSubmit = (data: RecurringFormData) => {
     if (!currentUser) return;
 
@@ -86,7 +97,7 @@ export function RecurringModal({ open, onOpenChange }: RecurringModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Configurar Recorrente</DialogTitle>
         </DialogHeader>
@@ -211,9 +222,11 @@ export function RecurringModal({ open, onOpenChange }: RecurringModalProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="weekly">Semanal</SelectItem>
-                      <SelectItem value="monthly">Mensal</SelectItem>
-                      <SelectItem value="yearly">Anual</SelectItem>
+                      {frequencyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />

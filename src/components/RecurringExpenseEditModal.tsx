@@ -22,6 +22,7 @@ const editRecurringSchema = z.object({
   amount: z.number().positive('Valor deve ser positivo'),
   type: z.enum(['income', 'expense']),
   transactionCategoryId: z.string().optional(),
+  frequency: z.enum(['daily', 'weekly', 'biweekly', 'monthly', 'bimonthly', 'quarterly', 'semester', 'yearly']),
   endDate: z.date().optional(),
   isInfinite: z.boolean(),
 });
@@ -48,6 +49,7 @@ export function RecurringExpenseEditModal({ expenseId, open, onOpenChange }: Rec
       amount: 0,
       type: 'expense',
       transactionCategoryId: '',
+      frequency: 'monthly',
       endDate: undefined,
       isInfinite: false,
     },
@@ -60,6 +62,7 @@ export function RecurringExpenseEditModal({ expenseId, open, onOpenChange }: Rec
         amount: recurringTransaction.amount,
         type: recurringTransaction.type,
         transactionCategoryId: recurringTransaction.transactionCategoryId || '',
+        frequency: recurringTransaction.recurrence?.type as any || 'monthly',
         endDate: recurringTransaction.recurrence?.endDate,
         isInfinite: recurringTransaction.recurrence?.isInfinite || false,
       });
@@ -77,6 +80,7 @@ export function RecurringExpenseEditModal({ expenseId, open, onOpenChange }: Rec
       transactionCategoryId: data.transactionCategoryId,
       recurrence: {
         ...recurringTransaction.recurrence!,
+        type: data.frequency,
         endDate: data.endDate,
         isInfinite: data.isInfinite,
       },
@@ -89,10 +93,20 @@ export function RecurringExpenseEditModal({ expenseId, open, onOpenChange }: Rec
   const selectedType = form.watch('type');
   const isInfiniteRecurrence = form.watch('isInfinite');
 
-  // Filtrar categorias baseado no tipo selecionado
   const availableCategories = transactionCategories.filter(category => 
     category.type === selectedType || category.type === 'both'
   );
+
+  const frequencyOptions = [
+    { value: 'daily', label: 'Diário' },
+    { value: 'weekly', label: 'Semanal' },
+    { value: 'biweekly', label: 'Quinzenal' },
+    { value: 'monthly', label: 'Mensal' },
+    { value: 'bimonthly', label: 'Bimestral' },
+    { value: 'quarterly', label: 'Trimestral' },
+    { value: 'semester', label: 'Semestral' },
+    { value: 'yearly', label: 'Anual' },
+  ];
 
   if (!recurringTransaction) return null;
 
@@ -176,6 +190,31 @@ export function RecurringExpenseEditModal({ expenseId, open, onOpenChange }: Rec
                       {availableCategories.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
                           {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="frequency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Frequência</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione a frequência" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {frequencyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
