@@ -1,0 +1,65 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Output de build
+dist/
+build/
+.out/
+
+# Vite
+.vite/
+.vitepress/
+*.local
+
+# Arquivos de ambiente
+.env
+.env.* 
+!.env.example
+
+# Cache do TypeScript
+*.tsbuildinfo
+
+# Logs
+logs
+*.log
+
+# Relatórios
+coverage/
+*.lcov
+
+# Arquivos temporários
+tmp/
+temp/
+
+# Arquivos de IDE JetBrains (WebStorm, IntelliJ, etc.)
+.idea/
+*.iml
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# VSCode (caso use algum colaborador)
+.vscode/
+
+# TailwindCSS (não gera arquivos extras, não precisa ignorar)
+
+# Storybook (se vier a usar)
+storybook-static/
+
+# Next.js (se usar no futuro)
+.next/
+out/
+
+# Cache do bun (se algum dia usar)
+.bun/
+
+# Cache de dependências
+.pnpm-store/
